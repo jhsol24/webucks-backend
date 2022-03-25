@@ -9,6 +9,7 @@ const prisma = new PrismaClient()
 const { sendCategories } = require('./sendCategories')
 const { sendProductList } = require('./sendProductList')
 const { sendProductDetail } = require('./sendProductDetail')
+const { sendUserLogin } = require('./sendUserLogin')
 
 
 // app 이라는 이름으로 express 사용
@@ -24,17 +25,20 @@ app.get('/', (req, res) => {
 app.get('/signup', (req, res) => {res.json('signup success')}) // 첫번째 인자에는 endpoint url 을 기입하고,
 app.get('/login', (req, res) => {res.json('login success')}) // 각각의 요청에 대해 핸들링 하는 함수를 두번째 인자로 넣습니다.
 
+
 // 각각의 json 파일을 불러오는 API 경로 설정
 app.get('/categories', sendCategories)
 app.get('/products', sendProductList)
 app.get('/product/2', sendProductDetail)
 
+
 // 회원가입 API
-app.post('/users/signup', async(req, res) => {
+app.post('/user/signup', async(req, res) => {
   try {
       const { email, password } = req.body
 
       // email 또는 password 가 입력되지 않으면 Error
+      // (custom 예외 처리)
       if (!email || !password) {
         const error = new Error('KEY_ERROR')
         error.statusCode = 400
@@ -77,6 +81,9 @@ app.post('/users/signup', async(req, res) => {
       return res.status(500).json({ message: err.message })
   }
 })
+
+// 로그인 API
+app.post('/user/login', sendUserLogin)
 
 // 가입된 유저 데이터를 가져오는 API
 app.get('/users', async(req, res) => {
