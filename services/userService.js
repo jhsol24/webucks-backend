@@ -61,4 +61,5 @@ const signIn = async (email, password) => {
     
     return jwt.sign({ userId: user[0].id }, process.env.SECRET_KEY)
 }
-    
+
+module.exports = { signUp, signIn }
