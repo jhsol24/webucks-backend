@@ -24,7 +24,6 @@ const getProducts = async (categoryId) => {
 }
 
 const getProduct = async (id) => {
-    console.log("getProduct in dao", id)
     return await prisma.$queryRaw`
         SELECT
             p.id AS id,
