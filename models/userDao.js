@@ -21,4 +21,4 @@ const createUser = async (email, encryptedPW) => {
     `
 }
 
-module.exports = { getUserByEmail, createUser }
+module.exports = { getUserByEmail, getUserWithPasswordByEmail, createUser }

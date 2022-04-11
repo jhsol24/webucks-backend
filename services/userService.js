@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken')
 const userDao = require('../models/userDao')
 
 // 회원가입 API (Business Loigic)
-const signUp = async (email, passowrd) => {
+const signUp = async (email, password) => {
 
     // password 길이가 8보다 작을 경우 Error
     if (password.length < 8) {
@@ -34,10 +34,10 @@ const signUp = async (email, passowrd) => {
 }
 
 // 로그인 API (Business Logic)
-const signIn = async (email, password) => {
+const login = async (email, password) => {
 
     // user 라는 변수명으로 userDao 에서 쿼리문 가져오기
-    const user = await userDao.getUserByEmail(email)
+    const user = await userDao.getUserWithPasswordByEmail(email)
     
     // 회원정보에 없는 email 일 때
     // 유저 정보 Error
@@ -50,7 +50,6 @@ const signIn = async (email, password) => {
     // password 를 암호화 해서
     // DB 상의 password(암호화됨) 와 비교하여
     // 틀리면 Error
-    console.log("user 만 불러오는데 pw는? : ", user)
     const isCorrect = bcrypt.compareSync(password, user[0].password)
 
     if (!isCorrect) {
@@ -62,4 +61,4 @@ const signIn = async (email, password) => {
     return jwt.sign({ userId: user[0].id }, process.env.SECRET_KEY)
 }
 
-module.exports = { signUp, signIn }
+module.exports = { signUp, login }
